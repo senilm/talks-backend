@@ -22,7 +22,7 @@ import authentication from './middleware/authentication.js'
 import UserModel from './models/user.js';
 import Post from './models/post.js';
 import { users, posts } from './data/index.js';
-import notFound from './middleware/notFound.js';
+
 
 // configurations
 const __filename = fileURLToPath(import.meta.url);
@@ -36,7 +36,7 @@ app.use(morgan("common"))
 app.use(bodyParser.json({limit:'30mb', extended:true}));
 app.use(bodyParser.urlencoded({limit:'30mb', extended:true}));
 app.use(cors())
-app.use(notFound)
+
 // app.use(function(req, res, next) {
 //     res.header("Access-Control-Allow-Credentials", "true")
 //     res.header("Access-Control-Allow-Origin", "*");
