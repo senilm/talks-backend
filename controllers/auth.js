@@ -1,31 +1,46 @@
 import UserModel from "../models/user.js";
 import bcrypt from 'bcrypt'
 import jwt  from "jsonwebtoken";
+import cloudinary from "../utils/utils.js";
+
 
 
 export const register = async(req,res) =>{
     try 
-    {
+    {   
         const {
             firstName,
             lastName,
             email,
-            password,
-            picturePath, 
+            password, 
             friends,
             location,
             occupation
         } = req.body;
+        const file = req.files.picture;
+        
+        if (!file) {
+            return res.status(400).json({ error: 'No file provided' });
+        }
+
+        const result = await cloudinary.uploader.upload(file.tempFilePath);
+
+        if (!result) {
+            return res.status(500).json({ error: 'Failed to upload file to Cloudinary' });
+        }
+       
         
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        
-        const newUser = new UserModel({
+        const newUser = UserModel.create({
             firstName,
             lastName,
             email,
             password:hashedPassword,
-            picturePath,
+            picture:{
+                public_id:result.public_id,
+                url:result.secure_url
+            },
             friends,
             location,
             occupation,
@@ -33,8 +48,9 @@ export const register = async(req,res) =>{
             impressions:Math.floor(Math.random() * 1000)
         })
     
-        const savedUser = await newUser.save(newUser);
-        res.status(200).json({savedUser})
+        
+        res.status(200).json({newUser})
+        
     } catch (err) {
         res.status(500).json({ error:err.message })
     }

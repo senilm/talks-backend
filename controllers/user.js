@@ -5,9 +5,7 @@ export const getUser = async (req, res) => {
         
         const {id} = req.params;
         const user = await UserModel.findById(id)
-        res.status(200).json(user) //change =>from {user} to only user
-        
-        // res.status(200).json("hi")
+        res.status(200).json(user)
     } catch (err) {
         res.status(400).json({message:err.message}); 
     }
@@ -24,13 +22,13 @@ export const getUserFriends = async (req, res) => {
             user.friends.map((id) => UserModel.findById(id)) //user.friends is an array of id(elements are id of friends)
         ) //mongo queries always return promise
         const formattedFriends = friends.map(
-            ({ _id, firstName, lastName, occupation, location, picturePath }) => {
-                return { _id, firstName, lastName, occupation, location, picturePath }
+            ({ _id, firstName, lastName, occupation, location, picture }) => {
+                return { _id, firstName, lastName, occupation, location, picture:picture.url }
             }
         )
         // res.status(200).json(req.user)
         res.status(200).json(formattedFriends)
-    } catch (err) {
+    } catch (err) { 
         res.status(400).json({message:err.message});
     }
 
@@ -62,8 +60,8 @@ export const updateUserFriends = async (req, res) => {
             user.friends.map((id) => UserModel.findById(id))
         )
         const formattedFriends = friends.map(
-            ({ _id, firstName, lastName, occupation, location, picturePath }) => {
-                return { _id, firstName, lastName, occupation, location, picturePath }
+            ({ _id, firstName, lastName, occupation, location, picture }) => {
+                return { _id, firstName, lastName, occupation, location, picture:picture.url }
             }
         )
 
