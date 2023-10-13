@@ -34,24 +34,14 @@ app.use(morgan("common"))
 app.use(bodyParser.json({limit:'30mb', extended:true}));
 app.use(bodyParser.urlencoded({limit:'30mb', extended:true}));
 const corsOptions ={
-    origin:'https://talks-24.vercel.app', 
+    origin:["https://talks-24.vercel.app"],
+    methods: ["POST", "GET", "DELETE","PATCH"], 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200,
  }
  
 app.use(cors(corsOptions))
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-      "Access-Control-Allow-Methods",
-      "OPTIONS, GET, POST, PUT, PATCH, DELETE"
-    );
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    if (req.method === "OPTIONS") {
-      return res.sendStatus(200);
-    }
-    next();
-  });
+;
 
 app.use('/assets', express.static(path.join(__dirname,"public/assets")))
 
@@ -80,6 +70,18 @@ app.use('/auth',authRoutes);
 app.use('/users',authentication,userRoutes)
 app.use('/posts',authentication, postRoutes)
 
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "OPTIONS, GET, POST, PUT, PATCH, DELETE"
+    );
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(200);
+    }
+    next();
+  })
 // mongoose setup
 const PORT = process.env.PORT || 6001;
 const connect = async () =>{
