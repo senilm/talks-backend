@@ -34,7 +34,7 @@ app.use(morgan("common"))
 app.use(bodyParser.json({limit:'30mb', extended:true}));
 app.use(bodyParser.urlencoded({limit:'30mb', extended:true}));
 const corsOptions ={
-    origin:["https://talks-24.vercel.app"],
+    origin:'*',
     methods: ["POST", "GET", "DELETE","PATCH"], 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200,
