@@ -34,7 +34,7 @@ app.use(morgan("common"))
 app.use(bodyParser.json({limit:'30mb', extended:true}));
 app.use(bodyParser.urlencoded({limit:'30mb', extended:true}));
 const corsOptions ={
-    origin:'*', 
+    origin:'https://talks-24.vercel.app', 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200,
  }
@@ -46,7 +46,7 @@ app.use((req, res, next) => {
       "Access-Control-Allow-Methods",
       "OPTIONS, GET, POST, PUT, PATCH, DELETE"
     );
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if (req.method === "OPTIONS") {
       return res.sendStatus(200);
     }
